@@ -1,4 +1,4 @@
-package com.example.kekodproject
+package com.example.kekodproject.data
 
 data class MenuItemData(
     val id: Int,

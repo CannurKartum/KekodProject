@@ -3,9 +3,11 @@ package com.example.kekodproject
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var bottomNavViewModel: MainActivityViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,59 +35,44 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navHostFragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
         bottomNavigationView.setupWithNavController(navController)
-
-        initializeBottomNavMenu()
+        bottomNavViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
         setupBottomNav()
 
+        // Observe ViewModel for changes in BottomNavigationView items and visibility
+        bottomNavViewModel.bottomNavItems.observe(this) { items ->
+            updateBottomNavMenu(items)
+        }
+
+        bottomNavViewModel.isBottomNavVisible.observe(this) { isVisible ->
+            bottomNavigationView.visibility = if (isVisible) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun setupBottomNav() {
+        bottomNavigationView.setupWithNavController(navController)
         bottomNavigationView.setOnItemSelectedListener { item ->
-            // Navigate to the appropriate fragment
             navController.navigate(item.itemId)
             true
         }
     }
 
-    // Initialize the BottomNavigationView with the Ego item as the default
-    private fun initializeBottomNavMenu() {
-        bottomNavigationView.menu.clear() // Clear any existing menu items
-        bottomNavigationView.menu.add(Menu.NONE, R.id.egoFragment, Menu.NONE, "Ego")?.apply {
-            setIcon(R.drawable.ic_ego) // Replace with your actual drawable for Ego
-        }
-    }
-
-    // Function to set up BottomNavigationView
-    private fun setupBottomNav() {
-        // Set up BottomNavigationView with NavController
-        bottomNavigationView.setupWithNavController(navController)
-    }
-
-    // Function to add menu items dynamically to BottomNavigationView
-    fun addMenuItemToBottomNav(key: String) {
-        // Check if there are already 5 items in the BottomNavigationView
-        if (bottomNavigationView.menu.size() >= 5) {
-            // Show a toast message if the limit is reached
-            Toast.makeText(this, "You cannot add more than 5 items to the bottom nav bar", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        // Check if the item is already in the menu to prevent duplicates
-        if (bottomNavigationView.menu.findItem(getMenuItemIdForKey(key)) == null) {
-            // Add the new menu item if under the limit
+    private fun updateBottomNavMenu(items: List<String>) {
+        bottomNavigationView.menu.clear()
+        items.forEach { key ->
             bottomNavigationView.menu.add(Menu.NONE, getMenuItemIdForKey(key), Menu.NONE, key.capitalize()).apply {
-                this?.setIcon(getIconForSwitch(key))
+                setIcon(getIconForSwitch(key))
             }
         }
     }
 
-    // Function to remove menu items dynamically from BottomNavigationView
-    fun removeMenuItemFromBottomNav(key: String) {
-        // Ensure we don't remove the default "Ego" menu item
-        if (key != "ego") {
-            bottomNavigationView.menu.removeItem(getMenuItemIdForKey(key))
+    fun addItemToBottomNav(key: String) {
+        if (!bottomNavViewModel.addBottomNavItem(key)) {
+            Toast.makeText(this, "You cannot add more than 5 items to the bottom nav bar", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // Helper function to get menu item ID based on the key
+    // Function to handle getting menu item ID based on the key
     private fun getMenuItemIdForKey(key: String): Int {
         return when (key) {
             "kindness" -> R.id.kindnessFragment
@@ -92,19 +80,21 @@ class MainActivity : AppCompatActivity() {
             "happiness" -> R.id.happinessFragment
             "respect" -> R.id.respectFragment
             "giving" -> R.id.givingFragment
+            "ego" -> R.id.egoFragment
             else -> throw IllegalArgumentException("Invalid key")
         }
     }
 
-    // Helper function to get icons for each menu item
+    // Function to handle getting icons for menu items
     private fun getIconForSwitch(key: String): Int {
         return when (key) {
-            "kindness" -> R.drawable.ic_kindness  // Replace with your actual drawable
-            "optimism" -> R.drawable.ic_optimism  // Replace with your actual drawable
-            "happiness" -> R.drawable.ic_happiness  // Replace with your actual drawable
-            "respect" -> R.drawable.ic_respect  // Replace with your actual drawable
-            "giving" -> R.drawable.ic_giving  // Replace with your actual drawable
-            else -> R.drawable.ic_launcher_foreground  // Fallback icon
+            "kindness" -> R.drawable.ic_kindness
+            "optimism" -> R.drawable.ic_optimism
+            "happiness" -> R.drawable.ic_happiness
+            "respect" -> R.drawable.ic_respect
+            "giving" -> R.drawable.ic_giving
+            "ego" -> R.drawable.ic_ego
+            else -> R.drawable.ic_launcher_foreground
         }
     }
 }

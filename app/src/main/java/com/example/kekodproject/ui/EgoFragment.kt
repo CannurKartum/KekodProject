@@ -10,9 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.kekodproject.MainActivity
+import com.example.kekodproject.MainActivityViewModel
 import com.example.kekodproject.R
 import com.example.kekodproject.databinding.FragmentEgoBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,8 +24,10 @@ class EgoFragment : Fragment() {
 
     private var _binding: FragmentEgoBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var switchMap: Map<String, Switch>
     private lateinit var mainActivity: MainActivity
+    private lateinit var bottomNavViewModel: MainActivityViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +40,11 @@ class EgoFragment : Fragment() {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Get reference to MainActivity
+        mainActivity = activity as MainActivity
+        // Initialize ViewModel
+        bottomNavViewModel = ViewModelProvider(requireActivity()).get(MainActivityViewModel::class.java)
 
         val switchKindness = view.findViewById<Switch>(R.id.switch_kidness)
         val switchOptimism = view.findViewById<Switch>(R.id.switch_optimism)
@@ -51,50 +60,43 @@ class EgoFragment : Fragment() {
             "ego" to switchEgo,
             "giving" to switchGiving
         )
-       mainActivity = activity as MainActivity
+
         setUpSwitchListeners()
+
         switchEgo.isChecked = true
 
-        if (switchEgo.isChecked) {
-            disableOtherSwitches()
-            mainActivity.bottomNavigationView.visibility = View.GONE
+        // Handle the initial visibility of the BottomNavigationView
+        bottomNavViewModel.isBottomNavVisible.observe(viewLifecycleOwner) { isVisible ->
+            mainActivity.bottomNavigationView.visibility = if (isVisible) View.VISIBLE else View.GONE
         }
-
-        switchEgo.setOnCheckedChangeListener { _, isChecked ->
-            if (switchEgo.isChecked) {
-                disableOtherSwitches()
-                mainActivity.bottomNavigationView.visibility = View.GONE
-            } else {
-                enableAllSwitches()
-                mainActivity.bottomNavigationView.visibility = View.VISIBLE
-            }
-        }
-
-
     }
 
     private fun setUpSwitchListeners() {
         switchMap.forEach { (key, switch) ->
             switch.setOnCheckedChangeListener { _, isChecked ->
                 when (key) {
-                    "ego" -> {
-                        if (isChecked) {
-                            disableOtherSwitches()
-                            mainActivity.bottomNavigationView.visibility = View.GONE
-                        } else {
-                            enableAllSwitches()
-                            mainActivity.bottomNavigationView.visibility = View.VISIBLE
-                        }
-                    }
-                    else -> {
-                        if (isChecked) {
-                            mainActivity.addMenuItemToBottomNav(key)
-                        } else {
-                            mainActivity.removeMenuItemFromBottomNav(key)
-                        }
-                    }
+                    "ego" -> handleEgoSwitch(isChecked)
+                    else -> handleOtherSwitches(key, isChecked)
                 }
             }
+        }
+    }
+
+    private fun handleEgoSwitch(isChecked: Boolean) {
+        if (isChecked) {
+            disableOtherSwitches()
+            bottomNavViewModel.setBottomNavVisibility(false)
+        } else {
+            enableAllSwitches()
+            bottomNavViewModel.setBottomNavVisibility(true)
+        }
+    }
+
+    private fun handleOtherSwitches(key: String, isChecked: Boolean) {
+        if (isChecked) {
+            bottomNavViewModel.addBottomNavItem(key)  // Add item to ViewModel
+        } else {
+            bottomNavViewModel.removeBottomNavItem(key)  // Remove item from ViewModel
         }
     }
 
@@ -103,7 +105,7 @@ class EgoFragment : Fragment() {
             if (key != "ego") {
                 switch.isEnabled = false
                 switch.isChecked = false
-                mainActivity.removeMenuItemFromBottomNav(key)
+                bottomNavViewModel.removeBottomNavItem(key)  // Remove from ViewModel as well
             }
         }
     }
