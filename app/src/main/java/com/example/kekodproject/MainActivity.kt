@@ -10,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.kekodproject.databinding.ActivityMainBinding
 import com.example.kekodproject.ui.EgoFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -24,10 +25,11 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize ViewBinding
         binding = ActivityMainBinding.inflate(layoutInflater)
+        val bottomNavigationView = binding.bottomNavigation
         setContentView(binding.root)
-        val bottomNavView: BottomNavigationView = binding.bottomNavigation
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHostFragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
+        bottomNavigationView.setupWithNavController(navController)
     }
 }

@@ -11,6 +11,7 @@ import android.widget.Switch
 import com.example.kekodproject.MainActivity
 import com.example.kekodproject.R
 import com.example.kekodproject.databinding.FragmentEgoBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class EgoFragment : Fragment() {
@@ -18,6 +19,7 @@ class EgoFragment : Fragment() {
     private var _binding: FragmentEgoBinding? = null
     private val binding get() = _binding!!
     private lateinit var switchMap: Map<String, Switch>
+    private var bottomNavigationView: BottomNavigationView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,18 +47,21 @@ class EgoFragment : Fragment() {
             "ego" to switchEgo,
             "giving" to switchGiving
         )
-
+        bottomNavigationView = (activity as? MainActivity)?.findViewById(R.id.bottom_navigation)
         switchEgo.isChecked = true
 
         if (switchEgo.isChecked) {
             disableOtherSwitches()
+            bottomNavigationView?.visibility = View.GONE
         }
 
         switchEgo.setOnCheckedChangeListener { _, isChecked ->
             if (switchEgo.isChecked) {
                 disableOtherSwitches()
+                bottomNavigationView?.visibility = View.GONE
             } else {
                 enableAllSwitches()
+                bottomNavigationView?.visibility = View.VISIBLE
             }
         }
 
