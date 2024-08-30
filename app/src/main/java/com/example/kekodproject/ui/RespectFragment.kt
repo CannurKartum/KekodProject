@@ -5,10 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.kekodproject.databinding.FragmentEgoBinding
+import com.example.kekodproject.databinding.FragmentRespectBinding
 
-class egoFragment : Fragment() {
-    private var _binding: FragmentEgoBinding? = null
+class RespectFragment : Fragment() {
+    private var _binding: FragmentRespectBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -16,7 +16,8 @@ class egoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View{
         // Inflate the layout for this fragment
-        _binding = FragmentEgoBinding.inflate(inflater, container, false)
+        _binding = FragmentRespectBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 

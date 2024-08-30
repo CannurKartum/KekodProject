@@ -5,11 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.kekodproject.databinding.FragmentKindnessBinding
+import com.example.kekodproject.databinding.FragmentHappinessBinding
 
-class kindnessFragment : Fragment() {
 
-    private var _binding: FragmentKindnessBinding? = null
+class HappinessFragment : Fragment() {
+
+    private var _binding: FragmentHappinessBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -17,11 +18,11 @@ class kindnessFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View{
         // Inflate the layout for this fragment
-        // Inflate the layout for this fragment
-        _binding = FragmentKindnessBinding.inflate(inflater, container, false)
+        _binding = FragmentHappinessBinding.inflate(inflater, container, false)
 
         return binding.root
     }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
