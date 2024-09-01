@@ -17,7 +17,8 @@
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintTop_toTopOf="parent"
-       android:layout_marginTop="50dp"/>
+       android:layout_marginTop="80dp"
+       />
 
    <Switch
        android:id="@+id/switch_optimism"
@@ -40,7 +41,8 @@
        android:textSize="22sp"
        app:layout_constraintEnd_toEndOf="@+id/switch_optimism"
        app:layout_constraintStart_toStartOf="@+id/switch_optimism"
-       app:layout_constraintTop_toBottomOf="@+id/switch_optimism" />
+       app:layout_constraintTop_toBottomOf="@+id/switch_optimism"
+       android:layout_marginTop="10dp"/>
 
    <Switch
        android:id="@+id/switch_happiness"
@@ -64,7 +66,8 @@
        android:textSize="22sp"
        app:layout_constraintEnd_toEndOf="@+id/switch_happiness"
        app:layout_constraintStart_toStartOf="@+id/switch_happiness"
-       app:layout_constraintTop_toBottomOf="@+id/switch_happiness" />
+       app:layout_constraintTop_toBottomOf="@+id/switch_happiness"
+       android:layout_marginTop="10dp"/>
 
    <Switch
        android:id="@+id/switch_respect"
@@ -87,7 +90,8 @@
        android:textSize="22sp"
        app:layout_constraintEnd_toEndOf="@+id/switch_respect"
        app:layout_constraintStart_toStartOf="@+id/switch_respect"
-       app:layout_constraintTop_toBottomOf="@+id/switch_respect" />
+       app:layout_constraintTop_toBottomOf="@+id/switch_respect"
+       android:layout_marginTop="10dp"/>
 
    <Switch
        android:id="@+id/switch_ego"
@@ -110,7 +114,8 @@
        android:textSize="22sp"
        app:layout_constraintEnd_toEndOf="@+id/switch_ego"
        app:layout_constraintStart_toStartOf="@+id/switch_ego"
-       app:layout_constraintTop_toBottomOf="@+id/switch_ego" />
+       app:layout_constraintTop_toBottomOf="@+id/switch_ego"
+       android:layout_marginTop="10dp"/>
 
    <Switch
        android:id="@+id/switch_giving"
@@ -133,7 +138,8 @@
        android:textSize="22sp"
        app:layout_constraintEnd_toEndOf="@+id/switch_giving"
        app:layout_constraintStart_toStartOf="@+id/switch_giving"
-       app:layout_constraintTop_toBottomOf="@+id/switch_giving" />
+       app:layout_constraintTop_toBottomOf="@+id/switch_giving"
+       android:layout_marginTop="10dp"/>
 
    <TextView
        android:id="@+id/textView2"
@@ -143,6 +149,7 @@
        android:textSize="22sp"
        app:layout_constraintEnd_toEndOf="@+id/switch_kidness"
        app:layout_constraintStart_toStartOf="@+id/switch_kidness"
-       app:layout_constraintTop_toBottomOf="@+id/switch_kidness"/>
+       app:layout_constraintTop_toBottomOf="@+id/switch_kidness"
+       android:layout_marginTop="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

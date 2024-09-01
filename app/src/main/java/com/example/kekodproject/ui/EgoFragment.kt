@@ -22,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class EgoFragment : Fragment() {
 
+
     private var _binding: FragmentEgoBinding? = null
     private val binding get() = _binding!!
 
@@ -62,12 +63,18 @@ class EgoFragment : Fragment() {
         )
 
         setUpSwitchListeners()
-
-        switchEgo.isChecked = true
+        restoreSwitchStates()
 
         // Handle the initial visibility of the BottomNavigationView
         bottomNavViewModel.isBottomNavVisible.observe(viewLifecycleOwner) { isVisible ->
             mainActivity.bottomNavigationView.visibility = if (isVisible) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun restoreSwitchStates() {
+        // Restore the state of each switch based on ViewModel data
+        switchMap.forEach { (key, switch) ->
+            switch.isChecked = bottomNavViewModel.getSwitchState(key)
         }
     }
 
@@ -78,6 +85,8 @@ class EgoFragment : Fragment() {
                     "ego" -> handleEgoSwitch(isChecked)
                     else -> handleOtherSwitches(key, isChecked)
                 }
+                // Save state to ViewModel
+                bottomNavViewModel.updateSwitchState(key, isChecked)
             }
         }
     }
@@ -94,7 +103,12 @@ class EgoFragment : Fragment() {
 
     private fun handleOtherSwitches(key: String, isChecked: Boolean) {
         if (isChecked) {
-            bottomNavViewModel.addBottomNavItem(key)  // Add item to ViewModel
+            if (bottomNavViewModel.bottomNavItems.value?.size ?: 0 >= 5) {
+                Toast.makeText(requireContext(), "You cannot add more than 5 items to the bottom nav bar", Toast.LENGTH_SHORT).show()
+                switchMap[key]?.isChecked = false
+            } else {
+                bottomNavViewModel.addBottomNavItem(key)  // Add item to ViewModel
+            }
         } else {
             bottomNavViewModel.removeBottomNavItem(key)  // Remove item from ViewModel
         }

@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var bottomNavViewModel: MainActivityViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,20 +58,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateBottomNavMenu(items: List<String>) {
         bottomNavigationView.menu.clear()
-        items.forEach { key ->
-            bottomNavigationView.menu.add(Menu.NONE, getMenuItemIdForKey(key), Menu.NONE, key.capitalize()).apply {
+
+        items.forEachIndexed { index, key ->
+            val menuItem = bottomNavigationView.menu.add(
+                Menu.NONE,
+                getMenuItemIdForKey(key),
+                Menu.NONE,
+                key.capitalize()
+            ).apply {
                 setIcon(getIconForSwitch(key))
+            }
+            if (items.size >= 5 && index == items.size - 1) {
+                menuItem.isEnabled = false
+                Toast.makeText(
+                    this,
+                    "You cannot add more than 5 items to the bottom nav bar",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
     fun addItemToBottomNav(key: String) {
-        if (!bottomNavViewModel.addBottomNavItem(key)) {
+        if (bottomNavViewModel.bottomNavItems.value?.size ?: 0 >= 5) {
             Toast.makeText(this, "You cannot add more than 5 items to the bottom nav bar", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        bottomNavViewModel.addBottomNavItem(key)
     }
 
-    // Function to handle getting menu item ID based on the key
     private fun getMenuItemIdForKey(key: String): Int {
         return when (key) {
             "kindness" -> R.id.kindnessFragment
@@ -85,7 +100,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Function to handle getting icons for menu items
     private fun getIconForSwitch(key: String): Int {
         return when (key) {
             "kindness" -> R.drawable.ic_kindness
