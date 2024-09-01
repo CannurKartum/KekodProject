@@ -45,12 +45,12 @@ class EgoFragment : Fragment() {
         // Initialize ViewModel
         bottomNavViewModel = ViewModelProvider(requireActivity()).get(MainActivityViewModel::class.java)
 
-        val switchKindness = view.findViewById<Switch>(R.id.switch_kidness)
-        val switchOptimism = view.findViewById<Switch>(R.id.switch_optimism)
-        val switchHappiness = view.findViewById<Switch>(R.id.switch_happiness)
-        val switchRespect = view.findViewById<Switch>(R.id.switch_respect)
-        val switchEgo = view.findViewById<Switch>(R.id.switch_ego)
-        val switchGiving = view.findViewById<Switch>(R.id.switch_giving)
+        val switchKindness = binding.switchKidness
+        val switchOptimism = binding.switchOptimism
+        val switchHappiness = binding.switchHappiness
+        val switchRespect = binding.switchRespect
+        val switchEgo = binding.switchEgo
+        val switchGiving = binding.switchGiving
         switchMap = mapOf(
             "kindness" to switchKindness,
             "optimism" to switchOptimism,
