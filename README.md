@@ -1,6 +1,6 @@
 
 
-[Switch Project](https://github.com/user-attachments/assets/79c14d03-5f45-4ef9-a1c4-6b116ccce101)
+![Switch (700 x 500 px)](https://github.com/user-attachments/assets/79c14d03-5f45-4ef9-a1c4-6b116ccce101)
 
 **Kekod Project**!
 
@@ -23,19 +23,3 @@ Features
 
 **4. User Feedback with Toast Messages**
     A Toast message is displayed if the user attempts to add more than 5 items to the BottomNavigationView, ensuring a user-friendly experience.
-
-
-**Project Structure**
-    ├── app
-│   ├── src/main
-│   │   ├── java/com/example/kekodproject
-│   │   │   ├── MainActivity.kt                   # Main activity handling BottomNavigationView and ViewModel setup
-│   │   │   ├── MainActivityViewModel.kt          # ViewModel managing the state of BottomNavigationView and switches
-│   │   │   └── ui
-│   │   │       └── EgoFragment.kt                # Fragment containing switches to manage BottomNavigationView items
-│   │   └── res
-│   │       ├── layout
-│   │       │   ├── activity_main.xml             # Layout file for MainActivity
-│   │       │   └── fragment_ego.xml              # Layout file for EgoFragment
-│   │       └── drawable                          # Icons for BottomNavigationView items
-│   └── build.gradle                              # Project build configuration
