@@ -58,4 +58,7 @@ dependencies {
     //viewmodel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.ktx)
+
+    //lottie-animation
+    implementation("com.airbnb.android:lottie:+")
 }
