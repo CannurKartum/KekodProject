@@ -21,8 +21,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class EgoFragment : Fragment() {
-
-
     private var _binding: FragmentEgoBinding? = null
     private val binding get() = _binding!!
 
@@ -62,8 +60,16 @@ class EgoFragment : Fragment() {
             "giving" to switchGiving
         )
 
-        setUpSwitchListeners()
+        // Restore switch states when the fragment is created
         restoreSwitchStates()
+        setUpSwitchListeners()
+
+        // Set initial visibility of BottomNavigationView based on "ego" switch state
+        if (switchEgo.isChecked) {
+            bottomNavViewModel.setBottomNavVisibility(false)  // Hide BottomNavigationView if "ego" is checked
+        } else {
+            bottomNavViewModel.setBottomNavVisibility(true)   // Show BottomNavigationView if "ego" is not checked
+        }
 
         // Handle the initial visibility of the BottomNavigationView
         bottomNavViewModel.isBottomNavVisible.observe(viewLifecycleOwner) { isVisible ->
@@ -75,6 +81,12 @@ class EgoFragment : Fragment() {
         // Restore the state of each switch based on ViewModel data
         switchMap.forEach { (key, switch) ->
             switch.isChecked = bottomNavViewModel.getSwitchState(key)
+            // Disable switches if "ego" is enabled
+            if (key != "ego" && bottomNavViewModel.getSwitchState("ego")) {
+                switch.isEnabled = false
+            } else {
+                switch.isEnabled = true
+            }
         }
     }
 
@@ -125,7 +137,7 @@ class EgoFragment : Fragment() {
     }
 
     private fun enableAllSwitches() {
-        switchMap.forEach { (_, switch) ->
+        switchMap.forEach { (key, switch) ->
             switch.isEnabled = true
         }
     }

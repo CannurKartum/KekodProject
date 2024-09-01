@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             ).apply {
                 setIcon(getIconForSwitch(key))
             }
-            if (items.size >= 5 && index == items.size - 1) {
+            if (items.size > 5 && index == items.size - 1) {
                 menuItem.isEnabled = false
                 Toast.makeText(
                     this,
